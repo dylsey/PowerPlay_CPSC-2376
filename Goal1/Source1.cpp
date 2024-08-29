@@ -3,19 +3,19 @@
 #include <vector>
 #include <random>
 
-struct Player 
+struct Player
 {
-	std::string name{"Trogdor"};
+	std::string name{ "Trogdor" };
 	int strength{ 0 };
 	int health{ 0 };
 };
 
 struct Monster
 {
-	std::string monsterName{ "monster" }; 
+	std::string monsterName{ "monster" };
 	int monsterNumber{ 0 };
-	int strength{ 0 }; 
-	int health{ 0 }; 
+	int strength{ 0 };
+	int health{ 0 };
 };
 
 //giving global access to engines, player, and monster vector
@@ -33,8 +33,8 @@ void createMonsters();
 
 int main()
 {
-	
-	createPlayer(); 
+
+	createPlayer();
 	createMonsters();
 
 	while (playerOne.health > 0)
@@ -52,70 +52,70 @@ int main()
 		system("CLS");
 		//Player Action 
 		std::cout << std::endl;
-		std::cout << playerOne.name << ", do you want to attack or heal? Enter 1 for attack and 2 for heal. " << std::endl; 
+		std::cout << playerOne.name << ", do you want to attack or heal? Enter 1 for attack and 2 for heal. " << std::endl;
 		int playerAction{};
 		std::cin >> playerAction;
 
 		//Attack Choice Tree
-		if (playerAction == 1) 
+		if (playerAction == 1)
 		{
-			std::cout << "Choose a monster to attack:" << std::endl; 
+			std::cout << "Choose a monster to attack:" << std::endl;
 			for (int i = 0; i < monsters.size(); i++)
 			{
 				std::cout << monsters.at(i).monsterName << " health: " << monsters.at(i).health << std::endl;
 			}
-			int playerAttackChoice; 
-			std::cin >> playerAttackChoice; 
+			int playerAttackChoice;
+			std::cin >> playerAttackChoice;
 
 			//will throw out of bounds exception error -- need to handle this error in final program 
 			switch (playerAttackChoice)
 			{
-				
-				case 1:
-				{
-					std::cout << "monster hit for: " << playerOne.strength << " damage" << std::endl;
-					monsters.at(0).health = monsters.at(0).health - playerOne.strength;
-					std::cout << monsters.at(0).monsterName << " health: " << monsters.at(0).health << std::endl;
-					break;
-				}
-				case 2:
-				{
-					std::cout << "monster hit for: " << playerOne.strength << " damage" << std::endl;
-					monsters.at(1).health = monsters.at(1).health - playerOne.strength;
-					std::cout << monsters.at(1).monsterName << " health: " << monsters.at(1).health << std::endl;
-					break;
-				}
-				case 3: 
-				{
-					std::cout << "monster hit for: " << playerOne.strength << " damage" << std::endl;
-					monsters.at(2).health = monsters.at(2).health - playerOne.strength;
-					std::cout << monsters.at(2).monsterName << " health: " << monsters.at(2).health << std::endl;
-					break;
-				}
+
+			case 1:
+			{
+				std::cout << "monster hit for: " << playerOne.strength << " damage" << std::endl;
+				monsters.at(0).health = monsters.at(0).health - playerOne.strength;
+				std::cout << monsters.at(0).monsterName << " health: " << monsters.at(0).health << std::endl;
+				break;
+			}
+			case 2:
+			{
+				std::cout << "monster hit for: " << playerOne.strength << " damage" << std::endl;
+				monsters.at(1).health = monsters.at(1).health - playerOne.strength;
+				std::cout << monsters.at(1).monsterName << " health: " << monsters.at(1).health << std::endl;
+				break;
+			}
+			case 3:
+			{
+				std::cout << "monster hit for: " << playerOne.strength << " damage" << std::endl;
+				monsters.at(2).health = monsters.at(2).health - playerOne.strength;
+				std::cout << monsters.at(2).monsterName << " health: " << monsters.at(2).health << std::endl;
+				break;
+			}
 			}
 		}
 
 		//healing action 
 		if (playerAction == 2)
 		{
-			playerOne.health = playerOne.health + (playerOne.strength * 2); 
-			std::cout << "player health: " << playerOne.health << std::endl; 
+			playerOne.health = playerOne.health + (playerOne.strength * 2);
+			std::cout << "player health: " << playerOne.health << std::endl;
 		}
 
 		system("pause");
 		system("CLS");
 
-		std::cout << "Monster Turn!!! " << std::endl; 
+		std::cout << "Monster Turn!!! " << std::endl;
 		//monster attack
-		for (auto & monster : monsters)
+		for (auto& monster : monsters)
 		{
 			//need to figure out dead monster not attacking
 			if (monsterAttackChance(engine))
 			{
 				std::cout << monsterAttackChance(engine) << " engine " << std::endl;
 				std::cout << monster.monsterName << " attacks for : " << monster.strength << std::endl;
-				playerOne.health = playerOne.health - monster.strength; 
-				std::cout << playerOne.name << " health: " << playerOne.health << std::endl; 
+				playerOne.health = playerOne.health - monster.strength;
+				std::cout << playerOne.name << " health: " << playerOne.health << std::endl;
 			}
 			else
 			{
