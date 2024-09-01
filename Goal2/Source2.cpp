@@ -42,13 +42,13 @@ void createPlayer()
 	player.name = "Trogdor";
 	do
 	{
-		player.strength = strDist(engine);
+		player.strength = round(strDist(engine));
 	}
 	while (player.strength < 1.0);
 
 	do
 	{
-		player.health = healthDist(engine);
+		player.health = round(healthDist(engine));
 	}
 	while (player.health < 1.0);
 }
@@ -217,6 +217,7 @@ void monsterAttack()
 		std::cout << "Monster's Turn!!! " << std::endl;
 		//monster attack
 		std::bernoulli_distribution willAttack(0.75);
+
 		for (const auto& monster : monsters)
 		{
 			if (monster.health > 0)
@@ -274,4 +275,3 @@ bool allMonstersDead()
 	}
 	return true;
 }
-
