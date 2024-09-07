@@ -17,6 +17,7 @@ std::random_device seed;
 std::default_random_engine engine(seed());
 Object player;
 Object monster;
+
 std::vector<Object> monsters;
 
 void createPlayer();
