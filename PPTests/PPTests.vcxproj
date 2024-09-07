@@ -18,17 +18,11 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Source2.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="monsters.txt" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{6276d848-2ff8-483e-8ace-dced0874e189}</ProjectGuid>
-    <RootNamespace>Goal2</RootNamespace>
+    <ProjectGuid>{77b65744-7434-40e1-9d2e-2e7f000fe455}</ProjectGuid>
+    <RootNamespace>PPTests</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -136,6 +130,12 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="PPTest.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="monsters.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
