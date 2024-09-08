@@ -9,4 +9,11 @@
 
 // add headers that you want to pre-compile here
 
+#include <iostream>
+#include <string>
+#include <vector>
+#include <random>
+#include <algorithm>
+#include <fstream>
+
 #endif //PCH_H
