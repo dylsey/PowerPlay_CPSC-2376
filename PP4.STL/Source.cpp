@@ -17,6 +17,21 @@ struct Item
 	};
 	Type clasification;
 	int bonusValue;
+	//overload or helper method for toString
+	std::string itemTypeToString(Item::Type type)
+	{
+		switch (type)
+		{
+		case Item::Type::armor:
+			return "Armor";
+		case Item::Type::shield:
+			return "Shield";
+		case Item::Type::sword:
+			return "Sword";
+		default:
+			return "Unknown";
+		}
+	}
 };
 
 struct Object
@@ -58,7 +73,14 @@ std::default_random_engine engine(seed());
 
 int main()
 {
-	Object player{ Object::Type::player, 0,1,0, {} };
+	Object player
+	{ 
+		Object::Type::player, 
+		0,//strength
+		1,//health
+		0,//level 
+		{} //inventory
+	};
 	std::vector<Object> monsters;
 	while (player.health > 0)
 	{
@@ -119,7 +141,7 @@ int main()
 void displayBattle(const Object& player, const std::vector<Object>& monsters)
 {
 	printName(player);
-	std::cout << " h:" << player.health << std::endl;
+	std::cout << " health:" << player.health << std::endl;
 	for (const auto& item : player.inventory)
 	{
 		std::cout << "  ";
@@ -131,7 +153,7 @@ void displayBattle(const Object& player, const std::vector<Object>& monsters)
 	{
 		std::cout << "   " << i + 1 << ". ";
 		printName(monsters[i]);
-		std::cout << " h:" << monsters[i].health << std::endl;
+		std::cout << " health:" << monsters[i].health << std::endl;
 	}
 }
 
@@ -226,15 +248,16 @@ void playerAttack(const Object& player, std::vector<Object>& monsters)
 
 void levelUp(Object& player)
 {
-
 		//1.  Increment player's level
 	player.level++;
 
 		//2.  randomly add health to player using randomHealth distribution (at least 1)
 	std::normal_distribution<double> randomHealth(20.0 + player.level * 5, 5.0);
+	player.health += std::max(1, (int)randomHealth(engine));
 
 		//3.  same for strength, but randomStrength distribution.
 	std::normal_distribution<double> randomStrength(3.0 + player.level, 1.0);
+	player.strength += std::max(1, (int)randomStrength(engine));
 
 		//4. create distributions for random item
 		//	a. uniform 0-Item::Type::numTypes-1 for type
@@ -244,9 +267,10 @@ void levelUp(Object& player)
 	std::normal_distribution<double> randomItemBonus(player.level, (player.level / 3.0));
 
 		//5. create new item with random values.
-	
+	Item newItem{ (Item::Type)randomItemType(engine), std::max(1, (int)randomItemBonus(engine)) };
 		//6. cout the information about the item.
-
+	std::cout << "You have found a ";
+    std::cout << newItem.itemTypeToString(newItem.clasification) << " with a bonus of " << newItem.bonusValue << std::endl;
 		//7. use find to see if you have that type of item.
 		//	a. if you don't, assign it.
 		//	b. if you do, check bonus value. Keep if new item bigger.
@@ -274,6 +298,7 @@ int calculateAC(const Object& object)
 	}
 	//return to the combined bonus values.
 	printName(object);
+	std::cout << std::endl;
 	std::cout << " Total AC: " << object.health << " + " << potentialAC - object.health << std::endl;
 	return std::max(1, potentialAC);
 
