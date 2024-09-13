@@ -8,22 +8,34 @@
 
 struct Item
 {
-	enum class Type { sword, armor, shield, numTypes };
+	enum class Type
+	{
+		sword,
+		armor,
+		shield,
+		numTypes
+	};
 	Type clasification;
 	int bonusValue;
 };
 
 struct Object
 {
-	enum class Type { player, slime, orc, sprite, dragon, numTypes };
+	enum class Type
+	{
+		player,
+		slime,
+		orc,
+		sprite,
+		dragon,
+		numTypes
+	};
 	Type name;
 	int strength{ 0 };
 	int health{ 0 };
 	int level{ 0 };
 	std::map<Item::Type, Item> inventory;
 };
-
-
 
 std::vector<Object> createMonsters(const Object& player);
 void monsterAttack(Object& player, const std::vector<Object>& monsters);
@@ -40,8 +52,6 @@ void printName(const Object& object);
 void printItem(const Item& item);
 int attack(const Object& object);
 void defend(Object& object, int damage);
-
-
 
 std::random_device seed;
 std::default_random_engine engine(seed());
@@ -61,7 +71,6 @@ int main()
 
 		while (player.health > 0 && monsters.size() > 0)
 		{
-
 			displayBattle(player, monsters);
 
 			std::cout << "What do you do? (a)ttack (h)eal ";
@@ -107,8 +116,6 @@ int main()
 
 }
 
-
-
 void displayBattle(const Object& player, const std::vector<Object>& monsters)
 {
 	printName(player);
@@ -131,13 +138,16 @@ void displayBattle(const Object& player, const std::vector<Object>& monsters)
 std::vector<Object> createMonsters(const Object& player)
 {
 	std::vector<Object> monsters;
-	std::normal_distribution<double> randomNumMonsters((double)player.level, player.level / 2.0);
-	int numMonsters{ std::max(1, (int)randomNumMonsters(engine)) };
+	std::normal_distribution<double> randomNumMonsters((double)player.level, ((double)player.level / 2.0));
+
+	int numMonsters;
+	numMonsters = { std::max(1, (int)randomNumMonsters(engine)) };
+
 
 	for (int i{ 0 }; i < numMonsters; i++)
 	{
 		//set level based on player level
-		std::normal_distribution<double> monsterLevel((float)player.level, player.level / 4.0);
+		std::normal_distribution<double> monsterLevel((double)player.level, (player.level / 4.0));
 		int level{ std::max(1, (int)monsterLevel(engine)) };
 
 		std::uniform_int_distribution<int> monsterType(1, (int)Object::Type::numTypes - 1);
@@ -208,38 +218,71 @@ void playerAttack(const Object& player, std::vector<Object>& monsters)
 	{
 		defend(monsters[monsterNum - 1], attack(player));
 	}
+	else
+	{
+		std::cout << "Invalid Monster" << std::endl;
+	}
 }
 
 void levelUp(Object& player)
 {
 
-	/*
-		1.  Increment player's level
-		2.  randomly at health to player using randomHealth distribution (at least 1)
-		3.  same for strength, but randomStrength distribution.
-		4. create distributions for random item
-			a. unifrom 0-Item::Type::numTypes-1 for type
-			b. normal player.level, player.level/3 for bonusValue.
-		5. create new item with random values.
-		6. cout the information about the item.
-		7. use find to see if you have that type of item.
-			a. if you don't, assign it.
-			b. if you do, check bonus value. Keep if new item bigger.
-	*/
+		//1.  Increment player's level
+	player.level++;
+
+		//2.  randomly add health to player using randomHealth distribution (at least 1)
 	std::normal_distribution<double> randomHealth(20.0 + player.level * 5, 5.0);
+
+		//3.  same for strength, but randomStrength distribution.
 	std::normal_distribution<double> randomStrength(3.0 + player.level, 1.0);
+
+		//4. create distributions for random item
+		//	a. uniform 0-Item::Type::numTypes-1 for type
+	std::uniform_int_distribution<int> randomItemType(0, (int)Item::Type::numTypes - 1);
+
+		//	b. normal player.level, player.level/3 for bonusValue.
+	std::normal_distribution<double> randomItemBonus(player.level, (player.level / 3.0));
+
+		//5. create new item with random values.
+	
+		//6. cout the information about the item.
+
+		//7. use find to see if you have that type of item.
+		//	a. if you don't, assign it.
+		//	b. if you do, check bonus value. Keep if new item bigger.
+	
+
+
 
 }
 
 int calculateAC(const Object& object)
 {
+	int potentialAC{ object.health };
 	//check for armor and shield
+	if (auto armor{ object.inventory.find(Item::Type::armor) };
+		armor != object.inventory.end())
+	{
+		auto armorBonus{ armor->second.bonusValue };
+		potentialAC += armorBonus;
+	}
+	if (auto shield{ object.inventory.find(Item::Type::shield) };
+		shield != object.inventory.end())
+	{
+		auto shieldBonus{ shield->second.bonusValue };
+		potentialAC += shieldBonus;
+	}
 	//return to the combined bonus values.
+	printName(object);
+	std::cout << " Total AC: " << object.health << " + " << potentialAC - object.health << std::endl;
+	return std::max(1, potentialAC);
+
+	return potentialAC;
 }
 
 void printName(const Object& object)
 {
-	std::cout << "L:" << object.level << " ";
+	std::cout << "Level:" << object.level << " ";
 	switch (object.name)
 	{
 	case Object::Type::player:
@@ -281,6 +324,11 @@ int attack(const Object& object)
 {
 	int potentialDamage{ object.strength };
 	//check for a sword. IF they have it, add to potential damage!
+	if (auto sword{ object.inventory.find(Item::Type::sword) };
+		sword != object.inventory.end())
+	{
+		potentialDamage += sword->second.bonusValue;
+	}
 	std::normal_distribution<double> damageDealt(potentialDamage, 2.0);
 
 	printName(object);
