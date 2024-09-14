@@ -15,9 +15,11 @@ struct Item
 		shield,
 		numTypes
 	};
+
 	Type clasification;
 	int bonusValue;
-	//overload or helper method for toString
+
+	//helper method for toString. not an overload
 	std::string itemTypeToString(Item::Type type)
 	{
 		switch (type)
@@ -32,6 +34,7 @@ struct Item
 			return "Unknown";
 		}
 	}
+
 };
 
 struct Object
@@ -46,9 +49,9 @@ struct Object
 		numTypes
 	};
 	Type name;
-	int strength{ 0 };
-	int health{ 0 };
-	int level{ 0 };
+	int strength{  };
+	int health{ };
+	int level{ };
 	std::map<Item::Type, Item> inventory;
 };
 
@@ -81,7 +84,9 @@ int main()
 		0,//level 
 		{} //inventory
 	};
+	
 	std::vector<Object> monsters;
+
 	while (player.health > 0)
 	{
 		levelUp(player);
@@ -90,27 +95,27 @@ int main()
 		std::cout << monsters.size() << " monster(s) approaches!!" << std::endl;
 		system("pause");
 		system("cls");
-
+		
 		while (player.health > 0 && monsters.size() > 0)
 		{
 			displayBattle(player, monsters);
 
 			std::cout << "What do you do? (a)ttack (h)eal ";
-			char command{ 'x' };
+			char command{ };
 			std::cin >> command;
 			switch (command)
 			{
-			case 'a':
-			{
-				playerAttack(player, monsters);
-				break;
-			}
-			case 'h':
-				heal(player);
-				break;
-			default:
-				std::cout << "please enter a or h" << std::endl;
-				break;
+				case 'a':
+				{
+					playerAttack(player, monsters);
+					break;
+				}
+				case 'h':
+					heal(player);
+					break;
+				default:
+					std::cout << "please enter a or h" << std::endl;
+					break;
 			}
 
 			bringOutYourDead(monsters);
@@ -141,9 +146,12 @@ int main()
 void displayBattle(const Object& player, const std::vector<Object>& monsters)
 {
 	printName(player);
-	std::cout << " health:" << player.health << std::endl;
+	std::cout << " health:" << player.health;
+	std::cout << " strength:" << player.strength << std::endl;
+
 	for (const auto& item : player.inventory)
 	{
+		std::cout << "Inventory : " << std::endl;
 		std::cout << "  ";
 		printItem(item.second);
 		std::cout << std::endl;
@@ -234,8 +242,10 @@ void monsterAttack(Object& player, const std::vector<Object>& monsters)
 void playerAttack(const Object& player, std::vector<Object>& monsters)
 {
 	std::cout << "Which Monster: ";
-	int monsterNum{ 0 };
+	int monsterNum{ };
 	std::cin >> monsterNum;
+
+	//error if a letter is entered instead of a number
 	if (monsterNum > 0 && monsterNum <= monsters.size())
 	{
 		defend(monsters[monsterNum - 1], attack(player));
@@ -250,14 +260,17 @@ void levelUp(Object& player)
 {
 		//1.  Increment player's level
 	player.level++;
+	std::cout << "Level UP! " << player.level << std::endl;
 
 		//2.  randomly add health to player using randomHealth distribution (at least 1)
 	std::normal_distribution<double> randomHealth(20.0 + player.level * 5, 5.0);
 	player.health += std::max(1, (int)randomHealth(engine));
+	std::cout << "Player Health: " << player.health << std::endl;
 
 		//3.  same for strength, but randomStrength distribution.
 	std::normal_distribution<double> randomStrength(3.0 + player.level, 1.0);
 	player.strength += std::max(1, (int)randomStrength(engine));
+	std::cout << "Player Strength: " << player.strength << std::endl;
 
 		//4. create distributions for random item
 		//	a. uniform 0-Item::Type::numTypes-1 for type
@@ -272,17 +285,31 @@ void levelUp(Object& player)
 	std::cout << "You have found a ";
     std::cout << newItem.itemTypeToString(newItem.clasification) << " with a bonus of " << newItem.bonusValue << std::endl;
 		//7. use find to see if you have that type of item.
+	if (auto item{ player.inventory.find(newItem.clasification) }; 
+		item == player.inventory.end())
+	{
 		//	a. if you don't, assign it.
+		player.inventory[newItem.clasification] = newItem;
+		std::cout << "You have added the item to your inventory" << std::endl;
+	}
+	else
+	{
 		//	b. if you do, check bonus value. Keep if new item bigger.
-	
-
-
-
+		if (item->second.bonusValue < newItem.bonusValue)
+		{
+			item->second = newItem;
+			std::cout << "You have replaced the item in your inventory" << std::endl;
+		}
+		else
+		{
+			std::cout << "You have discarded the item" << std::endl;
+		}
+	}	
 }
 
 int calculateAC(const Object& object)
 {
-	int potentialAC{ object.health };
+	int potentialAC{ object.level };
 	//check for armor and shield
 	if (auto armor{ object.inventory.find(Item::Type::armor) };
 		armor != object.inventory.end())
@@ -299,7 +326,7 @@ int calculateAC(const Object& object)
 	//return to the combined bonus values.
 	printName(object);
 	std::cout << std::endl;
-	std::cout << " Total AC: " << object.health << " + " << potentialAC - object.health << std::endl;
+	std::cout << " Total AC: " << object.level << " + " << potentialAC - object.level << std::endl;
 	return std::max(1, potentialAC);
 
 	return potentialAC;
@@ -333,16 +360,16 @@ void printItem(const Item& item)
 	switch (item.clasification)
 	{
 	case Item::Type::armor:
-		std::cout << "Armor";
+		std::cout << "Armor ";
 		break;
 	case Item::Type::shield:
-		std::cout << "Shield";
+		std::cout << "Shield ";
 		break;
 	case Item::Type::sword:
-		std::cout << "Sword";
+		std::cout << "Sword ";
 		break;
 	}
-	std::cout << "+" << item.bonusValue;
+	std::cout << "+ " << item.bonusValue;
 }
 
 int attack(const Object& object)
@@ -355,16 +382,18 @@ int attack(const Object& object)
 		potentialDamage += sword->second.bonusValue;
 	}
 	std::normal_distribution<double> damageDealt(potentialDamage, 2.0);
+	int damage{ std::max(1, (int)damageDealt(engine)) };
 
 	printName(object);
-	std::cout << " deals ";
-	return std::max(1, (int)damageDealt(engine));
+	std::cout << " deals " << damage << " damage " << std::endl;
+	return damage ;
 }
 
 void defend(Object& object, int damage)
 {
 	std::normal_distribution<double> defense(calculateAC(object), 1.0 / object.level);
 	damage = std::max(0, damage - (int)defense(engine));
+
 	std::cout << damage << " damage to ";
 	printName(object);
 	std::cout << "!!!" << std::endl;
@@ -375,6 +404,7 @@ void heal(Object& object)
 {
 	std::normal_distribution<double> randomHeal(object.strength, 3.0);
 	int  amountHealed{ std::max(1, (int)randomHeal(engine)) };
+
 	printName(object);
 	std::cout << " is healed by " << amountHealed << "hp!" << std::endl;
 	object.health += amountHealed;
