@@ -11,7 +11,6 @@ std::default_random_engine engine(seed());
 Object::Object() {}
 
 
-
 int Object::getStrength() const
 {
 	return strength;
@@ -31,7 +30,6 @@ Object::Type Object::getType() const
 {
 	return Type();
 }
-
 
 void Object::setLevel(int level)
 {
@@ -123,4 +121,8 @@ void Object::defend(Object& object, int damage)
 	object.health -= damage;
 }
 
+std::ostream& operator<<(std::ostream& out, const Object& object)
+{
+	// TODO: insert return statement here
 
+}

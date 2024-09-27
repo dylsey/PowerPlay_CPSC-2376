@@ -1,9 +1,8 @@
 #pragma once
 #include <map>
 #include <random>
+#include <iostream>
 #include "Item.h"
-
-
 
 class Object
 {
@@ -50,6 +49,10 @@ class Object
 		int attack(const Object& object);
 		void defend(Object& object, int damage);
 
+		friend std::ostream& operator<<(std::ostream& out, const Object& object);
+
 };
+//operator overloads
+
 
 

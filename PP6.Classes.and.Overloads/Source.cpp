@@ -58,14 +58,15 @@ int main()
 				break;
 			}
 			case 'h':
-				Object::heal(player);
-
-
-				heal(player);
+			{
+				player.heal(player);
 				break;
+			}
 			default:
+			{
 				std::cout << "please enter a or h" << std::endl;
 				break;
+			}
 			}
 
 			bringOutYourDead(monsters);
@@ -97,7 +98,9 @@ int main()
 
 void displayBattle(const Object& player, const std::vector<Object>& monsters)
 {
-	printName(player);
+	player.printName();
+
+	printName(player.getType);
 	std::cout << " h:" << player.health << std::endl;
 	std::for_each(player.inventory.begin(), player.inventory.end(), [](std::pair<Item::Type, Item> item)
 		{
