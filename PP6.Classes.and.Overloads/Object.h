@@ -20,14 +20,9 @@ class Object
 
 		//default constructor
 		Object();
-		//conversion constructor
 
-		//member variables	
-		Type type;
-		std::map<Item::Type, Item> inventory;
-		int strength{ 0 };
-		int health{ 0 };
-		int level{ 0 };
+		//conversion/overloaded constructor
+		Object(Type type, int strength, int health, int level, std::map<Item::Type, Item> inventory);
 
 		//getters
 		int getStrength() const;
@@ -45,14 +40,18 @@ class Object
 		//member functions
 		int calculateAC(const Object& object);
 		void heal(Object& object);
-		void printName(const Object& object);
+		//void printName(const Object& object);
 		int attack(const Object& object);
 		void defend(Object& object, int damage);
+	
+	protected: 
+		//member variables	
+		Type type;
+		std::map<Item::Type, Item> inventory;
+		int strength{ 1 };
+		int health{ 1 };
+		int level{ 1 };
 
 		friend std::ostream& operator<<(std::ostream& out, const Object& object);
 
 };
-//operator overloads
-
-
-

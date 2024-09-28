@@ -1,5 +1,9 @@
 #pragma once
 #include "Object.h"
+#include <map>	
+#include <vector>
+#include <iostream>
+#include <random> 
 
 
 class Player: public Object
@@ -9,7 +13,7 @@ class Player: public Object
 		Player();
 		//overloaded constructor
 		Player(std::string name, int strength, int health, int level, std::map<Item::Type, Item> inventory);
-		int spellPoints{ 0 };
+		int spellPoints{ 10 };
 
 		void playerAttack(const Object& player, std::vector<Object>& monsters);
 

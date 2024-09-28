@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 
 class Item
 {
@@ -11,9 +12,13 @@ class Item
 			numTypes 
 		};
 
+		Item();
+
 		Type clasification;
 		int bonusValue;
-		void printItem(const Item& item);
+		//void printItem(const Item& item);
+
+		friend std::ostream& operator<<(std::ostream& out, const Item& item);
 
 };
 

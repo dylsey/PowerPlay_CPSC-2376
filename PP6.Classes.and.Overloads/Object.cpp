@@ -10,6 +10,11 @@ std::default_random_engine engine(seed());
 
 Object::Object() {}
 
+Object::Object(Type type, int strength, int health, int level, std::map<Item::Type, Item> inventory)
+	: type{ type }, strength{ strength }, health{ health }, level{ level }, inventory{ inventory }
+{
+}
+
 
 int Object::getStrength() const
 {
@@ -74,28 +79,28 @@ void Object::heal(Object& object)
 	object.health += amountHealed;
 }
 
-void Object::printName(const Object& object)
-{
-	std::cout << "Level:" << object.level << " ";
-	switch (object.type)
-	{
-	case Object::Type::player:
-		std::cout << "Player";
-		break;
-	case Object::Type::slime:
-		std::cout << "Slime";
-		break;
-	case Object::Type::orc:
-		std::cout << "Orc";
-		break;
-	case Object::Type::sprite:
-		std::cout << "Sprite";
-		break;
-	case Object::Type::dragon:
-		std::cout << "Dragon";
-		break;
-	}
-}
+//void Object::printName(const Object& object)
+//{
+//	std::cout << "Level:" << object.level << " ";
+//	switch (object.type)
+//	{
+//	case Object::Type::player:
+//		std::cout << "Player";
+//		break;
+//	case Object::Type::slime:
+//		std::cout << "Slime";
+//		break;
+//	case Object::Type::orc:
+//		std::cout << "Orc";
+//		break;
+//	case Object::Type::sprite:
+//		std::cout << "Sprite";
+//		break;
+//	case Object::Type::dragon:
+//		std::cout << "Dragon";
+//		break;
+//	}
+//}
 
 int Object::attack(const Object& object)
 {
@@ -123,6 +128,24 @@ void Object::defend(Object& object, int damage)
 
 std::ostream& operator<<(std::ostream& out, const Object& object)
 {
-	// TODO: insert return statement here
+	switch (object.type)
+	{
+	case Object::Type::player:
+		out << "Player";
+		break;
+	case Object::Type::slime:
+		out << "Slime";
+		break;
+	case Object::Type::orc:
+		out << "Orc";
+		break;
+	case Object::Type::sprite:
+		out << "Sprite";
+		break;
+	case Object::Type::dragon:
+		out << "Dragon";
+		break;
+	}
 
+	return out; 
 }

@@ -1,20 +1,27 @@
 #include "Item.h"
 #include <iostream>
+#include <string>
 
 
-void Item::printItem(const Item& item)
+
+Item::Item()
+{
+}
+
+std::ostream& operator<<(std::ostream& out, const Item& item)
 {
 	switch (item.clasification)
 	{
-	case Type::sword:
-		std::cout << "Sword";
+	case Item::Type::sword:
+		out << "Sword";
 		break;
-	case Type::armor:
-		std::cout << "Armor";
+	case Item::Type::armor:
+		out << "Armor";
 		break;
-	case Type::shield:
-		std::cout << "Shield";
+	case Item::Type::shield:
+		out << "Shield";
 		break;
 	}
 	std::cout << " +" << item.bonusValue;
+	return out;
 }
