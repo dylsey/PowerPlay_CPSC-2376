@@ -41,10 +41,10 @@ class Object
 		int calculateAC(const Object& object);
 		void heal(Object& object);
 		//void printName(const Object& object);
-		int attack(const Object& object);
+		int attack(Object& object);
 		void defend(Object& object, int damage);
 	
-	protected: 
+	//protected: 
 		//member variables	
 		Type type;
 		std::map<Item::Type, Item> inventory;

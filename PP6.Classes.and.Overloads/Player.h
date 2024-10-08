@@ -4,6 +4,8 @@
 #include <vector>
 #include <iostream>
 #include <random> 
+#include "Monster.h"
+
 
 
 class Player: public Object
@@ -12,10 +14,10 @@ class Player: public Object
 		//default constructor
 		Player();
 		//overloaded constructor
-		Player(std::string name, int strength, int health, int level, std::map<Item::Type, Item> inventory);
+		Player(int strength, int health, int level, std::map<Item::Type, Item> inventory);
 		int spellPoints{ 10 };
 
-		void playerAttack(const Object& player, std::vector<Object>& monsters);
+		void playerAttack(Object& player, std::vector<Monster>& monsters);
 
 		void levelUp(Object& player);
 

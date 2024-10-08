@@ -14,9 +14,11 @@ class Item
 
 		Item();
 
+		Item(Type clasification, int bonusValue);
+
 		Type clasification;
-		int bonusValue;
-		//void printItem(const Item& item);
+		int bonusValue{0};
+
 
 		friend std::ostream& operator<<(std::ostream& out, const Item& item);
 

@@ -8,7 +8,9 @@
 std::random_device seed;
 std::default_random_engine engine(seed());
 
-Object::Object() {}
+Object::Object()
+{
+}
 
 Object::Object(Type type, int strength, int health, int level, std::map<Item::Type, Item> inventory)
 	: type{ type }, strength{ strength }, health{ health }, level{ level }, inventory{ inventory }
@@ -74,35 +76,11 @@ void Object::heal(Object& object)
 {
 	std::normal_distribution<double> randomHeal(object.strength, 3.0);
 	int  amountHealed{ std::max(1, (int)randomHeal(engine)) };
-	printName(object);
-	std::cout << " is healed by " << amountHealed << "hp!" << std::endl;
+	std::cout << object << " is healed by " << amountHealed << "hp!" << std::endl;
 	object.health += amountHealed;
 }
 
-//void Object::printName(const Object& object)
-//{
-//	std::cout << "Level:" << object.level << " ";
-//	switch (object.type)
-//	{
-//	case Object::Type::player:
-//		std::cout << "Player";
-//		break;
-//	case Object::Type::slime:
-//		std::cout << "Slime";
-//		break;
-//	case Object::Type::orc:
-//		std::cout << "Orc";
-//		break;
-//	case Object::Type::sprite:
-//		std::cout << "Sprite";
-//		break;
-//	case Object::Type::dragon:
-//		std::cout << "Dragon";
-//		break;
-//	}
-//}
-
-int Object::attack(const Object& object)
+int Object::attack(Object& object)
 {
 	int potentialDamage{ object.strength };
 	if (auto sword{ object.inventory.find(Item::Type::sword) }; sword != object.inventory.end())
@@ -111,8 +89,7 @@ int Object::attack(const Object& object)
 	}
 	std::normal_distribution<double> damageDealt(potentialDamage, 2.0);
 
-	printName(object);
-	std::cout << " deals ";
+	std::cout << object << " deals ";
 	return std::max(1, (int)damageDealt(engine));
 }
 
@@ -120,8 +97,7 @@ void Object::defend(Object& object, int damage)
 {
 	std::normal_distribution<double> defense(calculateAC(object), 1.0 / object.level);
 	damage = std::max(0, damage - (int)defense(engine));
-	std::cout << damage << " damage to ";
-	printName(object);
+	std::cout << damage << " damage to " << object << std::endl;
 	std::cout << "!!!" << std::endl;
 	object.health -= damage;
 }

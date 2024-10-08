@@ -25,14 +25,18 @@ std::default_random_engine engine(seed());
 
 int main()
 {
-	Object player;
-	
-	//{ Object::Type::player, 0,1,0, {} };
-	std::vector<Object> monsters;
+	Player player;
+	Monster monster;
+	std::vector<Monster> monsters;
+
 	while (player.getHealth() > 0)
 	{
-		levelUp(player);
-		monsters = createMonsters(player);
+		player.levelUp(player);
+
+		monsters = monster.createMonsters(player);
+
+
+		//monsters = createMonsters(player);
 
 		std::cout << monsters.size() << " monster(s) approaches!!" << std::endl;
 		system("pause");
@@ -50,7 +54,9 @@ int main()
 			{
 			case 'a':
 			{
-				playerAttack(player, monsters);
+				//player::playerAttack(player, monsters);
+				//player.attack(monsters);
+				//playerAttack(player, monsters);
 				break;
 			}
 			case 'h':
@@ -92,7 +98,7 @@ int main()
 
 
 
-void displayBattle(const Object& player, const std::vector<Object>& monsters)
+void displayBattle(const Object& player, const std::vector<Monster>& monsters)
 {
 	//player.printName();
 	player.getType(); 
@@ -113,56 +119,15 @@ void displayBattle(const Object& player, const std::vector<Object>& monsters)
 		std::for_each(monsters.begin(), monsters.end(), [&](const Object& monster)
 			{
 				std::cout << "   " << i << ". " << monster;
-				//printName(monster);
 				std::cout << " h:" << monster.getHealth() << std::endl;
 				i++;
 			});
 	}
 }
 
-std::vector<Object> createMonsters(const Object& player)
-{
-	
-}
-
-void monsterAttack(Object& player, const std::vector<Object>& monsters)
-{
-
-	std::cout << std::endl;
-	std::for_each(monsters.begin(), monsters.end(), [&](const Object& monster)
-		{
-			std::bernoulli_distribution willAttack(.75);
-			if (willAttack(engine))
-			{
-				std::cout << monster << " attacks!" << std::endl;
-				defend(player, attack(monster));
-			}
-			else
-			{
-				
-				std::cout << monster << " twiddles its thumbs" << std::endl;
-			}
-		});
-}
-
-void playerAttack(const Object& player, std::vector<Object>& monsters)
-{
-	std::cout << "Which Monster: ";
-	int monsterNum{ 0 };
-	std::cin >> monsterNum;
-	if (monsterNum > 0 && monsterNum <= monsters.size())
-	{
-		defend(monsters[monsterNum - 1], attack(player));
-	}
-}
-
-void levelUp(Object& player)
-{
-	
-}
 
 
-void bringOutYourDead(std::vector<Object>& monsters)
+void bringOutYourDead(std::vector<Monster>& monsters)
 {
 	monsters.erase(
 		std::remove_if(monsters.begin(), monsters.end(),

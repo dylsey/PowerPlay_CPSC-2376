@@ -12,7 +12,6 @@ Monster::Monster()
 
 
 Monster::Monster(Object::Type type, int strength, int health, int level)
-	: Monster(type, strength, health, level)
 {
 	this->type = type;
 	this->strength = strength;
@@ -20,10 +19,30 @@ Monster::Monster(Object::Type type, int strength, int health, int level)
 	this->level = level;
 }
 
-std::vector<Object> Monster::createMonsters(const Object& player)
+void Monster::monsterAttack(Object& player,  std::vector<Monster>& monsters)
+{
+	std::cout << std::endl;
+	std::for_each(monsters.begin(), monsters.end(), [&](Object& monster)
+		{
+			std::bernoulli_distribution willAttack(.75);
+			if (willAttack(engine))
+			{
+				std::cout << monster << " attacks!" << std::endl;
+				monster.attack(player);
+
+				defend(player, attack(monster));
+			}
+			else
+			{
+				std::cout << monster << " twiddles its thumbs" << std::endl;
+			}
+		});
+}
+
+std::vector<Monster> Monster::createMonsters(const Object& player)
 {
 	std::normal_distribution<double> randomNumMonsters((double)player.getLevel(), player.getLevel() / 2.0);
-	std::vector<Object> monsters(std::max(1, (int)randomNumMonsters(engine)));
+	std::vector<Monster> monsters(std::max(1, (int)randomNumMonsters(engine)));
 	std::generate(monsters.begin(), monsters.end(), [&]()
 		{
 			//set level based on player level
@@ -57,14 +76,14 @@ std::vector<Object> Monster::createMonsters(const Object& player)
 			std::normal_distribution<double> randomStrength(strengthVariance, level / 4.0);
 			std::normal_distribution<double> randomHealth(healthVariance * 5, level / 2.0);
 
-			//Object monster(
-			//	{
-			//		type,
-			//		std::max(1, (int)randomStrength(engine)),
-			//		std::max(1, (int)randomHealth(engine)),
-			//		level,
-			//		{}
-			//	});
+			Monster monster();
+
+			monster.type = name;
+					monster.strength = std::max(1, (int)randomStrength(engine)),
+					std::max(1, (int)randomHealth(engine)),
+					level,
+
+			
 			return monster;
 		});
 	return monsters;

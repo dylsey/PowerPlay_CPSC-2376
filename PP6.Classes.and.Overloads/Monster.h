@@ -8,8 +8,11 @@ class Monster: public Object
 	public: 
 		Monster();
 		Monster(Object::Type type, int strength, int health, int level);
+		
 
-		std::vector<Object> createMonsters(const Object& player);
+		void monsterAttack(Object& player,  std::vector<Monster>& monsters);
+
+		std::vector<Monster> createMonsters(const Object& player);
 
 
 };

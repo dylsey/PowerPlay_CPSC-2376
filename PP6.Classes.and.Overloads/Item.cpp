@@ -3,9 +3,16 @@
 #include <string>
 
 
-
 Item::Item()
 {
+
+}
+
+Item::Item(Type clasification, int bonusValue)
+{
+	this->clasification = clasification;
+	this->bonusValue = bonusValue;
+
 }
 
 std::ostream& operator<<(std::ostream& out, const Item& item)
@@ -22,6 +29,6 @@ std::ostream& operator<<(std::ostream& out, const Item& item)
 		out << "Shield";
 		break;
 	}
-	std::cout << " +" << item.bonusValue;
+	out << " +" << item.bonusValue;
 	return out;
 }

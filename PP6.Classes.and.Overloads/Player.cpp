@@ -9,13 +9,20 @@ Player::Player()
 {
 }
 
-Player::Player(std::string name, int strength, int health, int level, std::map<Item::Type, Item> inventory)
+Player::Player( int strength, int health, int level, std::map<Item::Type, Item> inventory)
 {
 
 }
 
-void Player::playerAttack(const Object& player, std::vector<Object>& monsters)
+void Player::playerAttack(Object& player, std::vector<Monster>& monsters)
 {
+	std::cout << "Which Monster: ";
+	int monsterNum{ 0 };
+	std::cin >> monsterNum;
+	if (monsterNum > 0 && monsterNum <= monsters.size())
+	{
+		defend(monsters[monsterNum - 1], attack(player));
+	}
 }
 
 void Player::levelUp(Object& player)
@@ -23,6 +30,7 @@ void Player::levelUp(Object& player)
 	player.level++;
 	std::normal_distribution<double> randomHealth(20.0 + player.level * 5, 5.0);
 	player.health += std::max(1, (int)randomHealth(engine));
+	
 
 	std::normal_distribution<double> randomStrength(3.0 + player.level, 1.0);
 	player.strength += std::max(1, (int)randomStrength(engine));
@@ -32,7 +40,7 @@ void Player::levelUp(Object& player)
 	std::normal_distribution<double> randomBonus((double)player.level, (double)player.level / 2);
 	Item found{ (Item::Type)randomItem(engine), std::max(1, (int)randomBonus(engine)) };
 
-	std::cout << "You found a " << item;
+	//std::cout << "You found a " << item;
 	//printItem(found);
 	std::cout << "!!!!" << std::endl;
 	if (
